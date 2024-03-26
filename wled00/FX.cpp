@@ -2056,36 +2056,71 @@ static const char _data_FX_MODE_PAIR[] PROGMEM = "Pair@;!,!;!;1v;m12=0,si=0";
 uint16_t mode_startup() {
   if (SEGENV.call == 0) {
     SEGMENT.fill(BLACK);    // clear LEDs
-    SEGENV.aux0 = 0;
+    SEGENV.aux0 = millis();
     SEGENV.aux1 = 0;
     SEGENV.step = 0;
   }
-  /*
-  * use of persistent variables:
-  * aux0: unused
-  * aux1: unused
-  * step: pos
-  */
-
-  uint16_t counter = 0;
-
-  SEGENV.step += SEGMENT.length() * 128/35;
-  counter = SEGENV.step >> 8;
 
   SEGMENT.fill(BLACK);    // clear LEDs
   SEGMENT.setPixelColor(0, 255, 0, 191);
 
-  for (unsigned i = 1; i < counter-1; i++) {
-    uint8_t colorIndex = ((i * 255) / SEGLEN) - counter;
-    uint32_t paletteColor = SEGMENT.color_from_palette(colorIndex, false, PALETTE_MOVING_WRAP, 255);
-    SEGMENT.setPixelColor((uint16_t)i, 255, 153, 0);
+	uint16_t maxVal = floor(map(millis()-SEGENV.aux0, 0, 2000, 0, SEGMENT.length()));
+
+  for (unsigned i = 1; i < min(SEGMENT.length(), maxVal); i++) {
+    SEGMENT.setPixelColor((uint16_t)i, 255, 125, 0);
   };
+
+	if(millis()-SEGENV.aux0 > 2100){
+	SEGMENT.mode = 188;
+	}
 
   return FRAMETIME;
 } // mode_startup() 
 static const char _data_FX_MODE_STARTUP[] PROGMEM = "Startup@;!,!;!;1v;m12=0,si=0";
 
+uint16_t mode_shutdown() {
+  if (SEGENV.call == 0) {
+    SEGMENT.fill(BLACK);    // clear LEDs
+    SEGENV.aux0 = 0;
+    SEGENV.aux1 = 0;
+    SEGENV.step = 0;
+  }
 
+  SEGMENT.fill(BLACK);    // clear LEDs
+  SEGMENT.setPixelColor(0, 255, 0, 191);
+
+	uint16_t maxVal = floor(map(SEGMENT.call, 0, 120, 0, SEGMENT.length()));
+	uint16_t val = SEGMENT.length()-min(SEGMENT.length(), maxVal);
+
+
+  for (unsigned i = 1; i < val; i++) {
+    SEGMENT.setPixelColor((uint16_t)i, 255, 125, 0);
+  };
+
+  return FRAMETIME;
+} // mode_shutdown() 
+static const char _data_FX_MODE_SHUTDOWN[] PROGMEM = "Shutdown@;!,!;!;1v;m12=0,si=0";
+
+uint16_t mode_volume() {
+  if (SEGENV.call == 0) {
+    SEGMENT.fill(BLACK);    // clear LEDs
+    SEGENV.aux0 = 0;
+    SEGENV.aux1 = 0;
+    SEGENV.step = 0;
+  }
+  
+  SEGMENT.fill(BLACK);    // clear LEDs
+  SEGMENT.setPixelColor(0, 255, 0, 191);
+
+	uint16_t maxVal = map(SEGMENT.speed, 0, 255, 0, SEGMENT.length());
+
+  for (unsigned i = 1; i < maxVal; i++) {
+    SEGMENT.setPixelColor((uint16_t)i, 255, 125, 0);
+  };
+
+  return FRAMETIME;
+} // mode_volume()
+static const char _data_FX_MODE_VOLUME[] PROGMEM = "Volume@pos;!,!;!;1v;m12=0,si=0";
 
 //eight colored dots, weaving in and out of sync with each other
 uint16_t mode_juggle(void) {
@@ -8459,6 +8494,8 @@ void WS2812FX::setupEffectData() {
 	
 	addEffect(FX_MODE_PAIR, &mode_pair, _data_FX_MODE_PAIR);
 	addEffect(FX_MODE_STARTUP, &mode_startup, _data_FX_MODE_STARTUP);
+	addEffect(FX_MODE_VOLUME, &mode_volume, _data_FX_MODE_VOLUME);
+	addEffect(FX_MODE_SHUTDOWN, &mode_shutdown, _data_FX_MODE_SHUTDOWN);
 
   // --- 1D audio effects ---
   addEffect(FX_MODE_PIXELS, &mode_pixels, _data_FX_MODE_PIXELS);

@@ -339,16 +339,17 @@ bool strip_uses_global_leds(void);              // WLEDMM implemented in FX_fcn.
 #define FX_MODE_STARTUP						  	 189
 #define FX_MODE_SHUTDOWN						   190
 #define FX_MODE_PAIR									 191
+#define FX_MODE_VOLUME								 192
 
 // Experimental Audioresponsive modes from WLED-SR
 // #define FX_MODE_3DSphereMove           189 // experimental WLED-SR "cube" mode
-#define FX_MODE_POPCORN_AR             190 // WLED-SR audioreactive popcorn
+#define FX_MODE_POPCORN_AR             193 // WLED-SR audioreactive popcorn
 // #define FX_MODE_MULTI_COMET_AR         191 // WLED-SR audioreactive multi-comet
-#define FX_MODE_STARBURST_AR           192 // WLED-SR audioreactive fireworks starburst
+#define FX_MODE_STARBURST_AR           194 // WLED-SR audioreactive fireworks starburst
 // #define FX_MODE_PALETTE_AR             193 // WLED-SR audioreactive palette
-#define FX_MODE_FIREWORKS_AR           194 // WLED-SR audioreactive fireworks
+#define FX_MODE_FIREWORKS_AR           195 // WLED-SR audioreactive fireworks
 
-#define MODE_COUNT                     195
+#define MODE_COUNT                     196
 
 typedef enum mapping1D2D {
   M12_Pixels = 0,
