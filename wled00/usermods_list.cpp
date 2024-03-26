@@ -197,11 +197,17 @@
 #ifdef USERMOD_MPU6050_IMU
 #include "../usermods/mpu6050_imu/usermod_mpu6050_imu.h"
 #endif
+
 #ifdef USERMOD_GAMES
 #include "../usermods/usermod_v2_games/usermod_v2_games.h"
 #endif
+
 #ifdef USERMOD_ANIMARTRIX
 #include "../usermods/usermod_v2_animartrix/usermod_v2_animartrix.h"
+#endif
+
+#ifdef USERMOD_EXTRAOPTIONS
+#include "../usermods/Extraoptions/extraoptions.h"
 #endif
 
 void registerUsermods()
@@ -248,7 +254,7 @@ void registerUsermods()
   usermods.add(new PIRsensorSwitch());
 #endif
 
-  #ifdef USERMOD_FOUR_LINE_DISPLAY
+#ifdef USERMOD_FOUR_LINE_DISPLAY
   usermods.add(new FourLineDisplayUsermod());
 #endif
 
@@ -380,7 +386,6 @@ void registerUsermods()
   usermods.add(new LDR_Dusk_Dawn_v2());
 #endif
 
-
 // WLEDMM ARTIFX
 #ifdef USERMOD_ARTIFX
   usermods.add(new ARTIFXUserMod());
@@ -390,7 +395,6 @@ void registerUsermods()
   usermods.add(new WeatherUsermod("Weather", true));
 #endif
 
-
 #ifdef USERMOD_MPU6050_IMU
   usermods.add(new MPU6050Driver("mpu6050-IMU", true));
 #endif
@@ -398,8 +402,12 @@ void registerUsermods()
 #ifdef USERMOD_GAMES
   usermods.add(new GamesUsermod());
 #endif
+
 #ifdef USERMOD_ANIMARTRIX
   usermods.add(new AnimartrixUsermod("Animartrix", false));
 #endif
 
+#ifdef USERMOD_EXTRAOPTIONS
+  usermods.add(new UsermodExtraOptions("Extraoptions", true));
+#endif
 }
