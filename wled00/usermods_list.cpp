@@ -206,10 +206,6 @@
 #include "../usermods/usermod_v2_animartrix/usermod_v2_animartrix.h"
 #endif
 
-#ifdef USERMOD_EXTRAOPTIONS
-#include "../usermods/Extraoptions/extraoptions.h"
-#endif
-
 void registerUsermods()
 {
   /*
@@ -405,9 +401,5 @@ void registerUsermods()
 
 #ifdef USERMOD_ANIMARTRIX
   usermods.add(new AnimartrixUsermod("Animartrix", false));
-#endif
-
-#ifdef USERMOD_EXTRAOPTIONS
-  usermods.add(new UsermodExtraOptions("Extraoptions", true));
 #endif
 }

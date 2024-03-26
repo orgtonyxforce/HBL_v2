@@ -1956,7 +1956,7 @@ static const char _data_FX_MODE_PRIDE_2015[] PROGMEM = "Pride 2015@!;;";
 
 
 //////////////////////
-//       PARTYJERK        //
+//    PARTYJERK     //
 //////////////////////
 // by  @tonyxforce
 // NB: This effects expects a palette that starts with black and then ramps up brightness. 
@@ -2018,6 +2018,73 @@ uint16_t mode_partyjerk() {
   return FRAMETIME;
 } // mode_partyjerk()
 static const char _data_FX_MODE_PARTYJERK[] PROGMEM = "Party jerk@Effect speed,Sensitivity,Color change speed,Effect speed active multiplier;!,!;!;1v;c1=8,c2=48,m12=0,si=0";
+
+uint16_t mode_pair() {
+  if (SEGENV.call == 0) {
+    SEGMENT.fill(BLACK);    // clear LEDs
+    SEGENV.aux0 = 0;
+    SEGENV.aux1 = 0;
+    SEGENV.step = 0;
+  }
+  /*
+  * use of persistent variables:
+  * aux0: unused
+  * aux1: unused
+  * step: pos
+  */
+
+  uint16_t counter = 0;
+
+  SEGENV.step += 128;
+  counter = SEGENV.step >> 8;
+
+  for (unsigned i = 0; i < SEGLEN; i++) {
+    uint8_t colorIndex = ((i * 255) / SEGLEN) - counter;
+    uint32_t paletteColor = SEGMENT.color_from_palette(colorIndex, false, PALETTE_MOVING_WRAP, 255);
+    uint8_t r = R(paletteColor);
+    uint8_t g = G(paletteColor);
+    uint8_t b = B(paletteColor);
+    uint8_t activeColor = max(r, max(g, b));
+
+    SEGMENT.setPixelColor((uint16_t)i, 0, 0, activeColor);
+  };
+
+  return FRAMETIME;
+} // mode_pair()
+static const char _data_FX_MODE_PAIR[] PROGMEM = "Pair@;!,!;!;1v;m12=0,si=0";
+
+uint16_t mode_startup() {
+  if (SEGENV.call == 0) {
+    SEGMENT.fill(BLACK);    // clear LEDs
+    SEGENV.aux0 = 0;
+    SEGENV.aux1 = 0;
+    SEGENV.step = 0;
+  }
+  /*
+  * use of persistent variables:
+  * aux0: unused
+  * aux1: unused
+  * step: pos
+  */
+
+  uint16_t counter = 0;
+
+  SEGENV.step += SEGMENT.length() * 128/35;
+  counter = SEGENV.step >> 8;
+
+  SEGMENT.fill(BLACK);    // clear LEDs
+  SEGMENT.setPixelColor(0, 255, 0, 191);
+
+  for (unsigned i = 1; i < counter-1; i++) {
+    uint8_t colorIndex = ((i * 255) / SEGLEN) - counter;
+    uint32_t paletteColor = SEGMENT.color_from_palette(colorIndex, false, PALETTE_MOVING_WRAP, 255);
+    SEGMENT.setPixelColor((uint16_t)i, 255, 153, 0);
+  };
+
+  return FRAMETIME;
+} // mode_startup() 
+static const char _data_FX_MODE_STARTUP[] PROGMEM = "Startup@;!,!;!;1v;m12=0,si=0";
+
 
 
 //eight colored dots, weaving in and out of sync with each other
@@ -8389,6 +8456,9 @@ void WS2812FX::setupEffectData() {
   addEffect(FX_MODE_BLENDS, &mode_blends, _data_FX_MODE_BLENDS);
   addEffect(FX_MODE_TV_SIMULATOR, &mode_tv_simulator, _data_FX_MODE_TV_SIMULATOR);
   addEffect(FX_MODE_DYNAMIC_SMOOTH, &mode_dynamic_smooth, _data_FX_MODE_DYNAMIC_SMOOTH);
+	
+	addEffect(FX_MODE_PAIR, &mode_pair, _data_FX_MODE_PAIR);
+	addEffect(FX_MODE_STARTUP, &mode_startup, _data_FX_MODE_STARTUP);
 
   // --- 1D audio effects ---
   addEffect(FX_MODE_PIXELS, &mode_pixels, _data_FX_MODE_PIXELS);

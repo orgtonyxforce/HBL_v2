@@ -336,6 +336,9 @@ bool strip_uses_global_leds(void);              // WLEDMM implemented in FX_fcn.
 #define FX_MODE_2DAKEMI                186
 #define FX_MODE_ARTIFX                 187 //WLEDMM ARTIFX
 #define FX_MODE_PARTYJERK              188
+#define FX_MODE_STARTUP						  	 189
+#define FX_MODE_SHUTDOWN						   190
+#define FX_MODE_PAIR									 191
 
 // Experimental Audioresponsive modes from WLED-SR
 // #define FX_MODE_3DSphereMove           189 // experimental WLED-SR "cube" mode
