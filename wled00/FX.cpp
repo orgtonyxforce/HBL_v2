@@ -2081,7 +2081,7 @@ static const char _data_FX_MODE_STARTUP[] PROGMEM = "Startup@;!,!;!;1v;m12=0,si=
 uint16_t mode_shutdown() {
   if (SEGENV.call == 0) {
     SEGMENT.fill(BLACK);    // clear LEDs
-    SEGENV.aux0 = 0;
+    SEGENV.aux0 = millis();
     SEGENV.aux1 = 0;
     SEGENV.step = 0;
   }
@@ -2096,6 +2096,11 @@ uint16_t mode_shutdown() {
   for (unsigned i = 1; i < val; i++) {
     SEGMENT.setPixelColor((uint16_t)i, 255, 125, 0);
   };
+
+	if(millis()-SEGENV.aux0 > 2100){
+	SEGMENT.mode = 0;
+	esp_deep_sleep_start();
+	}
 
   return FRAMETIME;
 } // mode_shutdown() 
